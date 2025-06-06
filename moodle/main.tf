@@ -87,7 +87,7 @@ resource "proxmox_virtual_environment_container" "dns_primary" {
     source      = "${path.module}/scripts/setup.sh"
     destination = "/tmp/setup.sh"
   }
-  
+/*
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setup.sh",
@@ -207,13 +207,15 @@ resource "proxmox_virtual_environment_container" "dns_secondary" {
   
   # Make sure primary is created first
   depends_on = [proxmox_virtual_environment_container.dns_primary]
+*/
 }
 
 # Output the DNS server IPs
 output "dns_primary_ip" {
   value = var.dns_primary_ip
 }
-
+/*
 output "dns_secondary_ip" {
   value = var.dns_secondary_ip
 }
+*/
