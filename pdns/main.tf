@@ -26,6 +26,26 @@ resource "proxmox_virtual_environment_vm" "dns_primary" {
     full  = true
   }
   
+  # Configuration cloud-init pour l'adresse IP
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "${var.dns_primary_ip}/24"
+        gateway = var.gateway_ip
+      }
+    }
+    
+    dns {
+      domain  = var.domain
+      servers = var.nameserver
+    }
+    
+    user_account {
+      keys     = [var.ssh_public_keys]
+      password = var.root_password
+    }
+  }
+  
   # Autres paramètres
   started = true
   tags    = ["dns", "primary"]
