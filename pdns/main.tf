@@ -19,27 +19,16 @@ resource "proxmox_virtual_environment_vm" "dns_primary" {
   node_name = var.proxmox_node
   vm_id     = var.dns_primary_container_id
   name      = "ns1"
-  started   = true
-  tags      = ["dns", "primary"]
   
-  initialization {
-    ip_config {
-      ipv4 {
-        address = "${var.dns_primary_ip}/24"
-        gateway = var.gateway_ip
-      }
-    }
-    
-    dns {
-      domain  = var.domain
-      servers = var.nameserver
-    }
-    
-    user_account {
-      keys     = [var.ssh_public_keys]
-      password = var.root_password
-    }
+  # Cloner depuis le template
+  clone {
+    vm_id = 9000  # ID de votre template
+    full  = true
   }
+  
+  # Autres paramètres
+  started = true
+  tags    = ["dns", "primary"]
   
   cpu {
     cores = 1
@@ -49,19 +38,12 @@ resource "proxmox_virtual_environment_vm" "dns_primary" {
     dedicated = 512
   }
   
-  machine = "q35"
-  
-  operating_system {
-    type = "l26"
-  }
-
   network_device {
     bridge = var.network_bridge
   }
   
   disk {
-    datastore_id = var.storage_pool
-    file_id      = var.vm_template_file_id
+    datastore_id = "local-zfs"  # Utilisez votre datastore existant
     interface    = "scsi0"
     size         = 8
   }

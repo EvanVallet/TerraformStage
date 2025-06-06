@@ -33,7 +33,7 @@ variable "ssh_private_key_path" {
 variable "storage_pool" {
   description = "ID of the storage pool to use"
   type        = string
-  default     = "local-zfs"
+  default     = "local-zfs"  # Assurez-vous que c'est bien local-zfs partout
 }
 
 variable "network_bridge" {
