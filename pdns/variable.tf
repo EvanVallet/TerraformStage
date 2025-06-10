@@ -42,10 +42,10 @@ variable "network_bridge" {
   default     = "vmbr0"
 }
 
-variable "vm_template_file_id" {
+variable "template_vm_id" {
   description = "ID of the container template to use"
   type        = string
-  default     = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+  default     = "9000"
 }
 
 variable "dns_primary_ip" {
