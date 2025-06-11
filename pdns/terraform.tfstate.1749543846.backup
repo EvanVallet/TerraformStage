@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.12.1",
-  "serial": 47,
+  "serial": 40,
   "lineage": "890fcd71-e020-1c50-aab0-138fcb60a754",
   "outputs": {},
   "resources": [
@@ -12,18 +12,24 @@
       "provider": "provider[\"registry.terraform.io/bpg/proxmox\"]",
       "instances": [
         {
-          "status": "tainted",
           "schema_version": 0,
           "attributes": {
             "acpi": true,
-            "agent": [],
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
             "audio_device": [],
             "bios": "seabios",
             "boot_order": null,
             "cdrom": [],
             "clone": [
               {
-                "datastore_id": "",
+                "datastore_id": "local-zfs",
                 "full": true,
                 "node_name": "",
                 "retries": 1,
@@ -34,17 +40,17 @@
               {
                 "affinity": "",
                 "architecture": "",
-                "cores": 1,
+                "cores": 4,
                 "flags": null,
                 "hotplugged": 0,
                 "limit": 0,
                 "numa": false,
                 "sockets": 1,
-                "type": "qemu64",
+                "type": "host",
                 "units": 1024
               }
             ],
-            "description": null,
+            "description": "pdns server VM",
             "disk": [
               {
                 "aio": "io_uring",
@@ -52,14 +58,14 @@
                 "cache": "none",
                 "datastore_id": "local-zfs",
                 "discard": "ignore",
-                "file_format": "",
+                "file_format": "raw",
                 "file_id": "",
                 "interface": "scsi0",
                 "iothread": false,
-                "path_in_datastore": "",
+                "path_in_datastore": "vm-100-disk-0",
                 "replicate": true,
                 "serial": "",
-                "size": 8,
+                "size": 64,
                 "speed": [],
                 "ssd": false
               }
@@ -70,7 +76,7 @@
             "id": "100",
             "initialization": [
               {
-                "datastore_id": "local-lvm",
+                "datastore_id": "local-zfs",
                 "dns": [
                   {
                     "domain": "iuc.cs",
@@ -81,7 +87,7 @@
                     ]
                   }
                 ],
-                "interface": "",
+                "interface": "ide2",
                 "ip_config": [
                   {
                     "ipv4": [
@@ -102,23 +108,23 @@
                     "keys": [
                       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
                     ],
-                    "password": "ubuntu",
-                    "username": ""
+                    "password": "**********",
+                    "username": "root"
                   }
                 ],
                 "user_data_file_id": "",
                 "vendor_data_file_id": ""
               }
             ],
-            "ipv4_addresses": null,
-            "ipv6_addresses": null,
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
             "keyboard_layout": "en-us",
             "kvm_arguments": null,
-            "mac_addresses": null,
+            "mac_addresses": [],
             "machine": null,
             "memory": [
               {
-                "dedicated": 512,
+                "dedicated": 16384,
                 "floating": 0,
                 "hugepages": "",
                 "keep_hugepages": false,
@@ -126,14 +132,14 @@
               }
             ],
             "migrate": false,
-            "name": "ns1",
+            "name": "pdns-primary",
             "network_device": [
               {
                 "bridge": "vmbr0",
                 "disconnected": false,
                 "enabled": true,
                 "firewall": false,
-                "mac_address": "",
+                "mac_address": "BC:24:11:EF:F6:43",
                 "model": "virtio",
                 "mtu": 0,
                 "queues": 0,
@@ -142,11 +148,15 @@
                 "vlan_id": 0
               }
             ],
-            "network_interface_names": null,
+            "network_interface_names": [],
             "node_name": "pve-worker-1",
             "numa": [],
             "on_boot": true,
-            "operating_system": [],
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
             "pool_id": null,
             "protection": false,
             "reboot": false,
@@ -160,8 +170,8 @@
             "stop_on_destroy": false,
             "tablet_device": true,
             "tags": [
-              "dns",
-              "primary"
+              "pdns",
+              "server"
             ],
             "template": false,
             "timeout_clone": 1800,
