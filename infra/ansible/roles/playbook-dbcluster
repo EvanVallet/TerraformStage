@@ -1,5 +1,0 @@
-- name: Install MariaDB cluster nodes
-  hosts: dbcluster
-  become: true
-  roles:
-    - mariadb_cluster

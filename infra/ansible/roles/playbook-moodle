@@ -1,5 +1,0 @@
-- name: Install Moodle application server
-  hosts: moodle
-  become: true
-  roles:
-    - moodle
