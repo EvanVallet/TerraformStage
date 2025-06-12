@@ -20,42 +20,21 @@ variable "proxmox_node" {
   type        = string
 }
 
-variable "ssh_public_keys" {
-  description = "SSH public key to add to authorized_keys"
-  type        = string
-}
-
-variable "ssh_private_key_path" {
-  description = "Path to the SSH private key for provisioning"
+variable "template_vm_id" {
+  description = "ID of the container template to use"
   type        = string
 }
 
 variable "storage_pool" {
   description = "ID of the storage pool to use"
   type        = string
-  default     = "local-zfs"  # Assurez-vous que c'est bien local-zfs partout
+  default     = "local-zfs"
 }
 
 variable "network_bridge" {
   description = "Network bridge to attach the container to"
   type        = string
   default     = "vmbr0"
-}
-
-variable "template_vm_id" {
-  description = "ID of the container template to use"
-  type        = string
-  default     = "9000"
-}
-
-variable "dns_primary_ip" {
-  description = "Static IP address for the primary DNS container"
-  type        = string
-}
-
-variable "dns_secondary_ip" {
-  description = "Static IP address for the secondary DNS container"
-  type        = string
 }
 
 variable "gateway_ip" {
@@ -74,20 +53,35 @@ variable "nameserver" {
   default     = ["1.1.1.1", "8.8.8.8"]
 }
 
-variable "dns_primary_container_id" {
-  description = "ID to assign to the primary DNS container"
-  type        = number
-  default     = 110
+# Authentification SSH
+variable "ssh_public_keys" {
+  description = "SSH public key to add to authorized_keys"
+  type        = string
 }
 
-variable "dns_secondary_container_id" {
-  description = "ID to assign to the secondary DNS container"
-  type        = number
-  default     = 111
+variable "ssh_private_key_path" {
+  description = "Path to the SSH private key for provisioning"
+  type        = string
 }
 
 variable "root_password" {
   description = "Root password for the containers"
   type        = string
   sensitive   = true
+}
+
+# Liste des VM à créer
+variable "vms" {
+  description = "List of VMs to create"
+  type        = list(object({
+    name          = string
+    description   = string
+    tags          = list(string)
+    vm_id         = number
+    ip_address    = string
+    cpu_cores     = number
+    cpu_sockets   = number
+    memory_mb     = number
+    disk_size_gb  = number
+  }))
 }

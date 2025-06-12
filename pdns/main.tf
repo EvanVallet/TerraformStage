@@ -10,75 +10,71 @@ terraform {
 provider "proxmox" {
   endpoint  = var.proxmox_api_url
   api_token = var.proxmox_api_token
-  insecure  = true
+  insecure  = var.proxmox_tls_insecure
 }
 
-resource "proxmox_virtual_environment_vm" "pdns_primary" {
+# Génération des VM en boucle via un for_each
+resource "proxmox_virtual_environment_vm" "vms" {
+  for_each = { for vm in var.vms : vm.name => vm }
+
   node_name    = var.proxmox_node
-  name         = "pdns-primary"
-  description  = "pdns server VM"
-  tags         = ["pdns", "server"]
-  vm_id        = var.dns_primary_container_id
-  
-  # Clone from template with storage target specified
+  name         = each.value.name
+  description  = each.value.description
+  tags         = each.value.tags
+  vm_id        = each.value.vm_id
+
   clone {
-    vm_id = var.template_vm_id
-    full  = true
+    vm_id        = var.template_vm_id
+    full         = true
     datastore_id = var.storage_pool
   }
-  
-  # VM specific settings
+
   agent {
     enabled = true
   }
-  
-  # Resource allocation
+
   cpu {
-    cores   = 4
-    sockets = 1
+    cores   = each.value.cpu_cores
+    sockets = each.value.cpu_sockets
     type    = "host"
   }
+
   memory {
-    dedicated = 16384
+    dedicated = each.value.memory_mb
   }
-  
-  # Disk configuration
+
   disk {
     datastore_id = var.storage_pool
-    size         = 64
+    size         = each.value.disk_size_gb
     interface    = "scsi0"
     discard      = "on"
     file_format  = "raw"
   }
-  
-  # Network configuration
+
   network_device {
     bridge = var.network_bridge
     model  = "virtio"
   }
-  
-  # Cloud-init configuration
+
   initialization {
     ip_config {
       ipv4 {
-        address = "${var.dns_primary_ip}/24"
+        address = "${each.value.ip_address}/24"
         gateway = var.gateway_ip
       }
     }
-    
+
     dns {
-      domain = var.domain
+      domain  = var.domain
       servers = var.nameserver
     }
-    
+
     user_account {
       username = "root"
       password = var.root_password
       keys     = [var.ssh_public_keys]
     }
-    
-    # Cloud-init settings as part of the standard configuration
-    # Remove the user_data attribute and instead use these settings:
+
     datastore_id = var.storage_pool
     interface    = "ide2"
   }
@@ -87,50 +83,14 @@ resource "proxmox_virtual_environment_vm" "pdns_primary" {
     type = "l26"
   }
 
-  # Add cloud-init custom settings outside initialization block
   lifecycle {
     ignore_changes = [
       initialization[0].datastore_id,
     ]
   }
-  
 }
 
-# Use local-exec instead of remote-exec initially to wait for VM to be accessible
-resource "null_resource" "wait_for_vm" {
-  depends_on = [proxmox_virtual_environment_vm.pdns_primary]  # Correction ici
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      echo "Waiting for VM to become accessible..."
-      count=0
-      max_attempts=30
-      until ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${var.ssh_private_key_path} root@${var.dns_primary_ip} echo "VM is accessible" || [ $count -eq $max_attempts ]
-      do
-        sleep 10
-        count=$((count+1))
-        echo "Attempt $count/$max_attempts: Waiting for VM to be accessible..."
-      done
-    EOT
-  }
-}
-
-# Use a separate null_resource for provisioners after we know the VM is accessible
-resource "null_resource" "pdns_provisioner" {
-  depends_on = [null_resource.wait_for_vm]
-
-  # Copy setup scripts
-  provisioner "file" {
-    source      = "${path.module}/script/setup.sh"  # Correction du chemin
-    destination = "/tmp/setup.sh"
-    
-    connection {
-      type        = "ssh"
-      user        = "root"
-      host        = var.dns_primary_ip
-      private_key = file(var.ssh_private_key_path)
-    }
-  }
-  
-
+# Optionnel : Output des IPs
+output "vm_ips" {
+  value = { for vm in var.vms : vm.name => vm.ip_address }
 }
