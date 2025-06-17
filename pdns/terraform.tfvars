@@ -21,7 +21,7 @@ vms = [
     ip_address   = "192.168.100.10"
     cpu_cores    = 4
     cpu_sockets  = 1
-    memory_mb    = 16384
+    memory_mb    = 2048
     disk_size_gb = 64
   },
   {
@@ -32,7 +32,7 @@ vms = [
     ip_address   = "192.168.100.11"
     cpu_cores    = 2
     cpu_sockets  = 1
-    memory_mb    = 8192
+    memory_mb    = 2048
     disk_size_gb = 32
   },
   {
