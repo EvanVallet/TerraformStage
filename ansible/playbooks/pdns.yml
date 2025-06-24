@@ -1,0 +1,8 @@
+- hosts: pdns
+  become: true
+  tasks:
+    - name: Install PowerDNS
+      apt:
+        name: pdns-server
+        state: present
+      update_cache: yes

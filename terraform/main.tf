@@ -94,3 +94,11 @@ resource "proxmox_virtual_environment_vm" "vms" {
 output "vm_ips" {
   value = { for vm in var.vms : vm.name => vm.ip_address }
 }
+
+resource "local_file" "ansible_inventory" {
+  content  = templatefile("${path.module}/templates/inventory.tpl", {
+    vm_ips               = { for vm in var.vms : vm.name => vm.ip_address }
+    ssh_private_key_path = var.ssh_private_key_path
+  })
+  filename = "${path.module}/../ansible/inventory.yml"
+}

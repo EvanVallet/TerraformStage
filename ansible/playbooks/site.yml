@@ -1,0 +1,15 @@
+- hosts: pdns
+  roles:
+    - powerdns
+
+- hosts: ldap
+  roles:
+    - openldap
+
+- hosts: mariadb_cluster
+  roles:
+    - mariadb
+
+- hosts: moodle
+  roles:
+    - moodle
