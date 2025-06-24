@@ -15,6 +15,18 @@ variable "proxmox_tls_insecure" {
   default     = false
 }
 
+variable "disable_disk_resize" {
+  description = "Disable automatic disk resizing to avoid worker errors"
+  type        = bool
+  default     = false
+}
+
+variable "skip_ansible_provisioning" {
+  description = "Skip Ansible provisioning (for manual configuration)"
+  type        = bool
+  default     = false
+}
+
 variable "proxmox_node" {
   description = "Name of the Proxmox node"
   type        = string

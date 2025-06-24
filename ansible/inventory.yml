@@ -1,0 +1,26 @@
+# Ansible Inventory généré automatiquement par Terraform
+# Ne pas modifier manuellement - sera écrasé à chaque déploiement
+
+[all:vars]
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_user=root
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[moodle]
+moodle ansible_host=192.168.100.16
+
+[pdns]
+pdns-primary ansible_host=192.168.100.10
+
+[pdns]
+pdns-secondary ansible_host=192.168.100.11
+
+
+[all]
+db-node1 ansible_host=192.168.100.13
+db-node2 ansible_host=192.168.100.14
+db-node3 ansible_host=192.168.100.15
+moodle ansible_host=192.168.100.16
+openldap ansible_host=192.168.100.12
+pdns-primary ansible_host=192.168.100.10
+pdns-secondary ansible_host=192.168.100.11

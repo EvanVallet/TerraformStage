@@ -12,6 +12,12 @@ ssh_public_keys = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48
 ssh_private_key_path = "~/.ssh/id_rsa"
 root_password = "ubuntu"
 
+# Désactiver temporairement le redimensionnement des disques pour éviter l'erreur
+disable_disk_resize = true
+
+# Désactiver temporairement Ansible pour éviter les erreurs de compatibilité Windows
+skip_ansible_provisioning = true
+
 vms = [
   {
     name         = "pdns-primary"
@@ -84,12 +90,11 @@ vms = [
     memory_mb    = 2048
     disk_size_gb = 64
     proxmox_node = "pve-worker-1"
-  },
-  {
+  },  {
     name         = "moodle"
     description  = "Moodle e-learning platform"
     tags         = ["moodle", "app"]
-    vm_id        = 116
+    vm_id        = 120
     ip_address   = "192.168.100.16"
     cpu_cores    = 4
     cpu_sockets  = 1

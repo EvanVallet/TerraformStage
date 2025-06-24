@@ -1,0 +1,1557 @@
+{
+  "version": 4,
+  "terraform_version": "1.12.1",
+  "serial": 74,
+  "lineage": "890fcd71-e020-1c50-aab0-138fcb60a754",
+  "outputs": {
+    "vm_ips": {
+      "value": {
+        "db-node1": "192.168.100.13",
+        "db-node2": "192.168.100.14",
+        "db-node3": "192.168.100.15",
+        "moodle": "192.168.100.16",
+        "openldap": "192.168.100.12",
+        "pdns-primary": "192.168.100.10",
+        "pdns-secondary": "192.168.100.11"
+      },
+      "type": [
+        "object",
+        {
+          "db-node1": "string",
+          "db-node2": "string",
+          "db-node3": "string",
+          "moodle": "string",
+          "openldap": "string",
+          "pdns-primary": "string",
+          "pdns-secondary": "string"
+        }
+      ]
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "ansible_inventory",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "# Ansible Inventory généré automatiquement par Terraform\r\n# Ne pas modifier manuellement - sera écrasé à chaque déploiement\r\n\r\n[all:vars]\r\nansible_ssh_private_key_file=~/.ssh/id_rsa\r\nansible_user=root\r\nansible_ssh_common_args='-o StrictHostKeyChecking=no'\r\n\r\n[moodle]\r\nmoodle ansible_host=192.168.100.16\r\n\r\n[pdns]\r\npdns-primary ansible_host=192.168.100.10\r\n\r\n[pdns]\r\npdns-secondary ansible_host=192.168.100.11\r\n\r\n\r\n[all]\r\ndb-node1 ansible_host=192.168.100.13\r\ndb-node2 ansible_host=192.168.100.14\r\ndb-node3 ansible_host=192.168.100.15\r\nmoodle ansible_host=192.168.100.16\r\nopenldap ansible_host=192.168.100.12\r\npdns-primary ansible_host=192.168.100.10\r\npdns-secondary ansible_host=192.168.100.11\r\n",
+            "content_base64": null,
+            "content_base64sha256": "r5B3kEmDVoQw098IWVW/dQ6WgV9FsHUA0LOiSH06uZM=",
+            "content_base64sha512": "JQbB09Evi3/hfoIdMkNa/9ghTJl1kHr+eDIJVCW5LMvwMJSA5oyoDHOth+TWQdnh/yQDheiqNkjLRfwSVJbJDA==",
+            "content_md5": "a632366b41db2d4ae465a08810c75fcc",
+            "content_sha1": "46a81093a70e84664dd445fe806325ed5c66468e",
+            "content_sha256": "af9077904983568430d3df085955bf750e96815f45b07500d0b3a2487d3ab993",
+            "content_sha512": "2506c1d3d12f8b7fe17e821d32435affd8214c9975907afe7832095425b92ccbf0309480e68ca80c73ad87e4d641d9e1ff240385e8aa3648cb45fc125496c90c",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "./../ansible/inventory.yml",
+            "id": "46a81093a70e84664dd445fe806325ed5c66468e",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "proxmox_virtual_environment_vm",
+      "name": "vms",
+      "provider": "provider[\"registry.terraform.io/bpg/proxmox\"]",
+      "instances": [
+        {
+          "index_key": "db-node1",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 4,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "MariaDB Galera Cluster Node 1",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-113-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 64,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "113",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.13/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 2048,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "db-node1",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:96:3E:F7",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "cluster",
+              "db"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 113,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "db-node2",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 4,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "MariaDB Galera Cluster Node 2",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-114-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 64,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "114",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.14/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 2048,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "db-node2",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:C4:66:B1",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "cluster",
+              "db"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 114,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "db-node3",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 4,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "MariaDB Galera Cluster Node 3",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-115-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 64,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "115",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.15/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 2048,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "db-node3",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:EB:73:64",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "cluster",
+              "db"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 115,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "moodle",
+          "status": "tainted",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 4,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "Moodle e-learning platform",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-116-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 3,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "116",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.16/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [
+              "BC:24:11:C2:7C:FA"
+            ],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 8192,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "moodle",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:C2:7C:FA",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": false,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "app",
+              "moodle"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 116,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "openldap",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 2,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "OpenLDAP directory server",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-112-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 32,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "112",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.12/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 8192,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "openldap",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:4C:FC:B8",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "ldap"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 112,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "pdns-primary",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 4,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "Primary PowerDNS server",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-110-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 64,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "110",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.10/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 2048,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "pdns-primary",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:0C:28:AB",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "dns",
+              "primary"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 110,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "pdns-secondary",
+          "schema_version": 0,
+          "attributes": {
+            "acpi": true,
+            "agent": [
+              {
+                "enabled": true,
+                "timeout": "15m",
+                "trim": false,
+                "type": "virtio"
+              }
+            ],
+            "audio_device": [],
+            "bios": "seabios",
+            "boot_order": null,
+            "cdrom": [],
+            "clone": [
+              {
+                "datastore_id": "local-zfs",
+                "full": true,
+                "node_name": "",
+                "retries": 1,
+                "vm_id": 9000
+              }
+            ],
+            "cpu": [
+              {
+                "affinity": "",
+                "architecture": "",
+                "cores": 2,
+                "flags": [],
+                "hotplugged": 0,
+                "limit": 0,
+                "numa": false,
+                "sockets": 1,
+                "type": "host",
+                "units": 1024
+              }
+            ],
+            "description": "Secondary PowerDNS server",
+            "disk": [
+              {
+                "aio": "io_uring",
+                "backup": true,
+                "cache": "none",
+                "datastore_id": "local-zfs",
+                "discard": "ignore",
+                "file_format": "raw",
+                "file_id": "",
+                "interface": "scsi0",
+                "iothread": false,
+                "path_in_datastore": "vm-111-disk-0",
+                "replicate": true,
+                "serial": "",
+                "size": 32,
+                "speed": [],
+                "ssd": false
+              }
+            ],
+            "efi_disk": [],
+            "hook_script_file_id": null,
+            "hostpci": [],
+            "id": "111",
+            "initialization": [
+              {
+                "datastore_id": "local-zfs",
+                "dns": [
+                  {
+                    "domain": "iuc.cs",
+                    "server": "",
+                    "servers": [
+                      "1.1.1.1",
+                      "8.8.8.8"
+                    ]
+                  }
+                ],
+                "interface": "ide2",
+                "ip_config": [
+                  {
+                    "ipv4": [
+                      {
+                        "address": "192.168.100.11/24",
+                        "gateway": "10.249.254.1"
+                      }
+                    ],
+                    "ipv6": []
+                  }
+                ],
+                "meta_data_file_id": "",
+                "network_data_file_id": "",
+                "type": "",
+                "upgrade": false,
+                "user_account": [
+                  {
+                    "keys": [
+                      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8MZrnPQ21iMCzZzX8MOY48k9Q+KIpmPh3Fqm8uF6Kr+4LRE1JnDQ6Ol9AuaIwK4rwHl/uI6nDf/hoX+nIrbO4uFRDuUU5k8umBlCmfC1OA0NcLtbhaxF9+yrrmm7aP0XqNli/ysmiE3mejcWxHDZN26K35y3ebRaahJh0r1N+DqiPwvH8kwiLctvvhB7pQchYPtmMd+a/Pskp+LLPwitgx4jP34b1HGPl5KE7QBx1GGN1pHFnt4mnEZK996gqbaTgVBOUYi8APRbn9dZzXd0y3SclxHpKDogG0jUV/PywVLcROj0D+5/Wlha/gh3lcUGm2YVJRRJcdOixreOHsOFc3kZ6wrFQMEgBAlnKhjHZnCooBJEUWeEcf69iPsAu3eLjQxmeY5aBzcj+oZUwFnd2eoTYg3HGYboKYBpMPIgsORgCuyYv/N69VJ6OuwmkjVOdczrX9uCpFS//PFUzzuEVsoWp1PGj2LyvqHjk4A3MCZhBSL1mDENOIu+p9jxG4VknvOv5tXpJUUcR1RY8iTowCQyarmwfFmsUyjqfN2p8ddpnMx+ZKGJh2q7cFL+ofAC0B6UR5H6VxdhLKV/wxpgd0E6I6+n+MigSsUVWUeV0p/HfyVvVR4zqDsLv6+1vaDhOStNpF7zY/MDxt1zdvjhW+rzEN5R0rxZtndEllh2zyw== evanv@LAPTOP-I1TKGGFB"
+                    ],
+                    "password": "**********",
+                    "username": "root"
+                  }
+                ],
+                "user_data_file_id": "",
+                "vendor_data_file_id": ""
+              }
+            ],
+            "ipv4_addresses": [],
+            "ipv6_addresses": [],
+            "keyboard_layout": "en-us",
+            "kvm_arguments": null,
+            "mac_addresses": [],
+            "machine": null,
+            "memory": [
+              {
+                "dedicated": 2048,
+                "floating": 0,
+                "hugepages": "",
+                "keep_hugepages": false,
+                "shared": 0
+              }
+            ],
+            "migrate": false,
+            "name": "pdns-secondary",
+            "network_device": [
+              {
+                "bridge": "vmbr0",
+                "disconnected": false,
+                "enabled": true,
+                "firewall": false,
+                "mac_address": "BC:24:11:C3:A0:E2",
+                "model": "virtio",
+                "mtu": 0,
+                "queues": 0,
+                "rate_limit": 0,
+                "trunks": "",
+                "vlan_id": 0
+              }
+            ],
+            "network_interface_names": [],
+            "node_name": "pve-worker-1",
+            "numa": [],
+            "on_boot": true,
+            "operating_system": [
+              {
+                "type": "l26"
+              }
+            ],
+            "pool_id": null,
+            "protection": false,
+            "reboot": false,
+            "reboot_after_update": true,
+            "rng": [],
+            "scsi_hardware": "virtio-scsi-pci",
+            "serial_device": [],
+            "smbios": [],
+            "started": true,
+            "startup": [],
+            "stop_on_destroy": false,
+            "tablet_device": true,
+            "tags": [
+              "dns",
+              "secondary"
+            ],
+            "template": false,
+            "timeout_clone": 1800,
+            "timeout_create": 1800,
+            "timeout_migrate": 1800,
+            "timeout_move_disk": 1800,
+            "timeout_reboot": 1800,
+            "timeout_shutdown_vm": 1800,
+            "timeout_start_vm": 1800,
+            "timeout_stop_vm": 300,
+            "tpm_state": [],
+            "usb": [],
+            "vga": [],
+            "vm_id": 111,
+            "watchdog": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "initialization"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "user_account"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

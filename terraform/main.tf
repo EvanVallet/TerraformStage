@@ -22,11 +22,11 @@ resource "proxmox_virtual_environment_vm" "vms" {
   description  = each.value.description
   tags         = each.value.tags
   vm_id        = each.value.vm_id
-
   clone {
     vm_id        = var.template_vm_id
     full         = true
     datastore_id = var.storage_pool
+    retries      = 3
   }
 
   agent {
@@ -38,24 +38,24 @@ resource "proxmox_virtual_environment_vm" "vms" {
     sockets = each.value.cpu_sockets
     type    = "host"
   }
-
   memory {
     dedicated = each.value.memory_mb
   }
 
   disk {
     datastore_id = var.storage_pool
-    size         = each.value.disk_size_gb
+    size         = var.disable_disk_resize ? null : each.value.disk_size_gb
     interface    = "scsi0"
     discard      = "on"
-    file_format  = "raw"
+    file_format  = "qcow2"
+    backup       = true
+    replicate    = false
   }
 
   network_device {
     bridge = var.network_bridge
     model  = "virtio"
   }
-
   initialization {
     ip_config {
       ipv4 {
@@ -87,12 +87,24 @@ resource "proxmox_virtual_environment_vm" "vms" {
     ignore_changes = [
       initialization[0].datastore_id,
     ]
+    create_before_destroy = false
   }
 }
 
 # Optionnel : Output des IPs
 output "vm_ips" {
   value = { for vm in var.vms : vm.name => vm.ip_address }
+}
+
+# Output des informations de connexion
+output "connection_info" {
+  value = {
+    for vm in var.vms : vm.name => {
+      ip_address = vm.ip_address
+      vm_id      = vm.vm_id
+      ssh_command = "ssh -i ${var.ssh_private_key_path} root@${vm.ip_address}"
+    }
+  }
 }
 
 resource "local_file" "ansible_inventory" {
@@ -104,12 +116,15 @@ resource "local_file" "ansible_inventory" {
 }
 
 resource "null_resource" "ansible_provision" {
+  count = var.skip_ansible_provisioning ? 0 : 1
+  
   depends_on = [
     proxmox_virtual_environment_vm.vms,
     local_file.ansible_inventory
   ]
-
+  
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ../ansible/inventory.yml ../ansible/playbooks/site.yml"
+    command     = "powershell.exe -ExecutionPolicy Bypass -File ./run-ansible.ps1"
+    working_dir = path.module
   }
 }
