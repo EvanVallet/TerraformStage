@@ -102,3 +102,14 @@ resource "local_file" "ansible_inventory" {
   })
   filename = "${path.module}/../ansible/inventory.yml"
 }
+
+resource "null_resource" "ansible_provision" {
+  depends_on = [
+    proxmox_virtual_environment_vm.vms,
+    local_file.ansible_inventory
+  ]
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ../ansible/inventory.yml ../ansible/playbooks/site.yml"
+  }
+}
