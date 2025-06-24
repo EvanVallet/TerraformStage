@@ -72,8 +72,7 @@ variable "root_password" {
 
 # Liste des VM à créer
 variable "vms" {
-  description = "List of VMs to create"
-  type        = list(object({
+  type = list(object({
     name          = string
     description   = string
     tags          = list(string)
@@ -83,5 +82,6 @@ variable "vms" {
     cpu_sockets   = number
     memory_mb     = number
     disk_size_gb  = number
+    proxmox_node  = string
   }))
 }

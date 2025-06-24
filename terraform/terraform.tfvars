@@ -23,6 +23,7 @@ vms = [
     cpu_sockets  = 1
     memory_mb    = 2048
     disk_size_gb = 64
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "pdns-secondary"
@@ -34,6 +35,7 @@ vms = [
     cpu_sockets  = 1
     memory_mb    = 2048
     disk_size_gb = 32
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "openldap"
@@ -45,6 +47,7 @@ vms = [
     cpu_sockets  = 1
     memory_mb    = 8192
     disk_size_gb = 32
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "db-node1"
@@ -54,8 +57,9 @@ vms = [
     ip_address   = "192.168.100.13"
     cpu_cores    = 4
     cpu_sockets  = 1
-    memory_mb    = 8192
+    memory_mb    = 2048
     disk_size_gb = 64
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "db-node2"
@@ -65,8 +69,9 @@ vms = [
     ip_address   = "192.168.100.14"
     cpu_cores    = 4
     cpu_sockets  = 1
-    memory_mb    = 8192
+    memory_mb    = 2048
     disk_size_gb = 64
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "db-node3"
@@ -76,8 +81,9 @@ vms = [
     ip_address   = "192.168.100.15"
     cpu_cores    = 4
     cpu_sockets  = 1
-    memory_mb    = 8192
+    memory_mb    = 2048
     disk_size_gb = 64
+    proxmox_node = "pve-worker-1"
   },
   {
     name         = "moodle"
@@ -87,7 +93,8 @@ vms = [
     ip_address   = "192.168.100.16"
     cpu_cores    = 4
     cpu_sockets  = 1
-    memory_mb    = 16384
+    memory_mb    = 8192
     disk_size_gb = 64
+    proxmox_node = "pve-worker-1"
   }
 ]
