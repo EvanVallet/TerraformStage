@@ -1,0 +1,117 @@
+# pour la plupar j'ai utiliser la doc d'instalation a l'exeption de moodle : 
+
+# moodle instalation:
+
+# mettre a jour le system : 
+sudo apt update && sudo apt upgrade -y
+
+# ensuite il faut apache et php 8.0 :
+sudo apt install apache2 -y
+sudo apt install php php-cli php-common php-mysql php-xml php-curl php-zip php-mbstring php-soap php-intl php-gd php-bcmath libapache2-mod-php -y
+
+# puis il faut installer le packages requis pour moodle :
+cd /tmp
+wget https://download.moodle.org/latest.zip
+sudo apt install unzip -y
+unzip latest.zip
+sudo mv moodle /var/www/moodle
+# crée les dossier moodle
+sudo mkdir /var/moodledata
+sudo chown -R www-data:www-data /var/moodledata
+sudo chmod -R 755 /var/moodledata
+# configurer apache pour moodle :   
+sudo nano /etc/apache2/sites-available/moodle.conf
+# puis ajouter le contenu suivant :
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/moodle
+
+    <Directory /var/www/moodle>
+        Options +FollowSymlinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/moodle_error.log
+    CustomLog ${APACHE_LOG_DIR}/moodle_access.log combined
+</VirtualHost>
+# puis activer le site moodle :
+sudo a2dissite 000-default.conf
+sudo a2ensite moodle.conf
+sudo a2enmod rewrite
+sudo systemctl reload apache2
+# configurer la base de données pour moodle (si on la veux en local sur moodle) :
+sudo apt install mariadb-server -y
+sudo mysql_secure_installation
+# puis créer la base de données et l'utilisateur pour moodle :
+sudo mysql -u root -p
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'moodleuser'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON moodle.* TO 'moodleuser'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+# probleme que j'ai eu :
+# max_input_vars trop faible :
+sudo nano /etc/php/8.0/apache2/php.ini
+# puis modifier la ligne :
+max_input_vars = 1000
+# et mettre a 5000 ou plus
+# puis redémarrer apache :
+sudo systemctl restart apache2
+
+# terminer l'installation de moodle en accédant à http://localhost/moodle dans un navigateur web
+
+# le plus gros probleme que j'ai eu c'etait la connexion a ldap :
+# ma configuration de moodle :
+#sur la page de configuration de moodle, server ldap (administration du site > plugins > servers ldap) :
+
+# configuration du serveur ldap :
+url du serveur ldap : ldap://IP_DU_SERVEUR_LDAP
+version : 3
+utiliser tls : non
+encodage : utf-8
+taille de page : 250
+
+# configuration du lien :
+empecher la mise en cache des utilisateurs : non
+DN (distinguished name) de liaison : cn=admin,dc=example,dc=com
+mot de passe : motdepasse
+
+# configuration de la consultation des utilisateurs :
+type utilisateur : posixAccount
+contexte de recherche : dc=example,dc=com
+recherche sous-contexte : oui
+dé-réferencer les alias : non
+attributs utilisateur : uid
+Attribut de suspension : vide
+Attribut appartenance : vide
+L’attribut appartenance utilise dn : non
+Classe objet : inetOrgPerson
+
+# Imposer le changement du mot de passe
+#laisser tout par defaut :
+
+# Réglages de l’échéance du mot de passe LDAP
+#Laisser tout par defaut :
+
+# Activer la création des utilisateurs
+#Laisser tout par defaut :
+
+# Correspondance des rôles système
+#Laisser tout par defaut :
+
+# Synchronisation des comptes utilisateur
+#Laisser tout par defaut :
+
+# SSO NTLM
+#Laisser tout par defaut :
+
+# Appariement des données
+Correspondance de données  (Prénom) : givenName
+Correspondance de données  (Nom) : sn
+Correspondance de données  (mail) : mail
+Correspondance de données  (Numero d identification) : uid
+Modifier la valeur locale  (Numero d identification) : a chaque connexion
+
+# voila ma configuration de moodle pour ldap
